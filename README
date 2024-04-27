@@ -2,3 +2,7 @@ Name:		Sujith Kumar Thankaraj
 B-Number:	B01042991
 Email:		sthankaraj@binghamton.edu
 
+Given functions have been implemented by the given hints.
+
+Issues faced:
+    For id_poly_eval function tried to use Recursive local function to ConvertCoeffs but since local function was not defined already before calling the recurision faced an issue known as ConvertCoeffs is unbound.

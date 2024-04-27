@@ -17,9 +17,7 @@
 -define(test_tuple_poly_eval, enabled).
 -define(test_assoc_lookup, enabled).
 -define(test_id_poly_eval, enabled).
--if(false).
-% -define(test_server_fn, enabled).
--endif.
+-define(test_server_fn, enabled).
 
 
 %----------------------- Recursive Polynomial Eval ----------------------
@@ -71,7 +69,7 @@ rec_poly_eval_test_() -> [
 % polynomial (using list:zip, list:seq() and math:pow())
 % followed by a lists:foldl() to sum the terms.
 non_rec_poly_eval(Coeffs, X) ->
-    lists:foldl(fun({First, Last}, Acc) ->round(First * math:pow(X, Last)) + Acc end, 0, lists:zip(Coeffs, lists:seq(0, X), trim)).
+    lists:foldl(fun({First, Last}, Acc) ->Acc + round(First * math:pow(X, Last))  end, 0, lists:zip(Coeffs, lists:seq(0, length(Coeffs) - 1), trim)).
 
 
 -ifdef(test_non_rec_poly_eval).
@@ -254,8 +252,23 @@ id_poly_eval_test_() ->
 %      to log an error on standard error and recurse with both Assoc and
 %      Coeffs unchanged.
 
-server_fn(_Assoc, _Coeffs) ->
-    'TODO'.
+server_fn(Assoc, Coeffs) ->
+    receive
+        {ClientPid, stop} ->
+            ClientPid ! {self(), set_assoc};
+        {ClientPid, set_assoc, Assoc1 } ->
+            ClientPid ! { self(), set_assoc },
+            server_fn(Assoc1, Coeffs);
+        { ClientPid, set_coeffs, Coeffs1 } ->
+            ClientPid ! { self(), set_coeffs },
+            server_fn(Assoc, Coeffs1);
+        { ClientPid, eval, X } ->
+            Result = id_poly_eval(Assoc, Coeffs, X),
+            ClientPid ! { self(), eval, Result },
+            server_fn(Assoc, Coeffs);
+        Msg ->
+            io:format(standard_error, "unknown message ~p~n", [ Msg ]) 
+    end.
 			
 -ifdef(test_server_fn).
 
