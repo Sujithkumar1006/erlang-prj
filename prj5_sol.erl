@@ -69,7 +69,7 @@ rec_poly_eval_test_() -> [
 % polynomial (using list:zip, list:seq() and math:pow())
 % followed by a lists:foldl() to sum the terms.
 non_rec_poly_eval(Coeffs, X) ->
-    lists:foldl(fun({First, Last}, Acc) ->Acc + round(First * math:pow(X, Last))  end, 0, lists:zip(Coeffs, lists:seq(0, length(Coeffs) - 1), trim)).
+    lists:foldl(fun({First, Last}, Acc) ->Acc + round(First * math:pow(X, Last))  end, 0, lists:zip(Coeffs, lists:seq(0, length(Coeffs) - 1))).
 
 
 -ifdef(test_non_rec_poly_eval).

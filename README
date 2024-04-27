@@ -5,4 +5,5 @@ Email:		sthankaraj@binghamton.edu
 Given functions have been implemented by the given hints.
 
 Issues faced:
-    For id_poly_eval function tried to use Recursive local function to ConvertCoeffs but since local function was not defined already before calling the recurision faced an issue known as ConvertCoeffs is unbound.
+   1. For id_poly_eval function tried to use Recursive local function to ConvertCoeffs but since local function was not defined already before calling the recurision faced an issue known as ConvertCoeffs is unbound.
+   2. lists:zip in Eshell V14.2.4 accepts 3 arguments but in remote machine version it accepts only 2 arguments.
